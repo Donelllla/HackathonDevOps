@@ -5,12 +5,6 @@
     <style>
         body { font-family: Arial, sans-serif; line-height: 1.6; margin: 2em; }
         a { display: block; margin: 1em 0; padding: 0.5em; background: #f0f0f0; }
-	#cpu-load {
-	    padding: 0.5em;
-	    background: #e0e0ff;
-	    display: inline-block;
-            min-width: 150px;
-        }
     </style>
 </head>
 <body>
@@ -23,7 +17,7 @@
     <a href="/secondserver">External Server</a>
     <a href="/redblue">Red/Blue</a>
     
-    <div>CPU Load: <span id="cpu-load">-</span>%</div>
+    <div>CPU Load: <span id="cpu-display">-</span>%</div>
 
     <p>SSL connection: <strong id="ssl-status">checking...</strong></p>
 
@@ -34,15 +28,15 @@
     </ul>    
 
     <script>
-        document.getElementById('ssl-status').textContent = 
-            window.location.protocol === 'https:' ? 'Active' : 'Inactive';
-
-	const cpuElement = document.getElementyById('cpu-load');
-	const eventSource = new EventSource('/cpu-sse');
-
+	const cpuDisplay = document.getElementById('cpu-display');
+	const eventSource = new EventSource('/cpu_status.php');
+	
 	eventSource.onmessage = function(e) {
-	    cpuElement.textContent = parseFloat(e.data).toFixed(1);
-        };
+		const data = JSON.parse(e.data);
+		cpuDisplay.textContent = data.cpu;
+	};
+	
+	document.getElementById('ssl-status').textContent = window.location.protocol === 'https:' ? 'Active' : 'Inactive';
     </script>
 </body>
 </html>
