@@ -1,0 +1,13 @@
+[Unit]
+Description=NGINX Log Manager
+After=nginx.service
+
+[Service]
+ExecStart=/usr/local/bin/nginx_log_manager.sh
+Restart=always
+RestartSec=5
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target

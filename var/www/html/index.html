@@ -5,6 +5,12 @@
     <style>
         body { font-family: Arial, sans-serif; line-height: 1.6; margin: 2em; }
         a { display: block; margin: 1em 0; padding: 0.5em; background: #f0f0f0; }
+	#cpu-load {
+	    padding: 0.5em;
+	    background: #e0e0ff;
+	    display: inline-block;
+            min-width: 150px;
+        }
     </style>
 </head>
 <body>
@@ -15,18 +21,28 @@
     <a href="/music.mp3" download>Download Music File</a>
     <a href="/info.php">PHP Info (Apache)</a>
     <a href="/secondserver">External Server</a>
-    <a href="/localapp">Local App (Port 8081)</a>
-    <div id="cpu-load">CPU Load: </div>
+    <a href="/redblue">Red/Blue</a>
+    
+    <div>CPU Load: <span id="cpu-load">-</span>%</div>
 
     <p>SSL connection: <strong id="ssl-status">checking...</strong></p>
+
     <h2>Image Examples</h2>
     <ul>
-    <li><a href="/image1/sample.jpg">Flipped JPG Image</a></li>
-    <li><a href="/image2/example.png">Original PNG Image</a></li>
+        <li><a href="/image1/sample.jpg">Flipped JPG Image</a></li>
+        <li><a href="/image2/sample.png">Original PNG Image</a></li>
     </ul>    
+
     <script>
         document.getElementById('ssl-status').textContent = 
             window.location.protocol === 'https:' ? 'Active' : 'Inactive';
+
+	const cpuElement = document.getElementyById('cpu-load');
+	const eventSource = new EventSource('/cpu-sse');
+
+	eventSource.onmessage = function(e) {
+	    cpuElement.textContent = parseFloat(e.data).toFixed(1);
+        };
     </script>
 </body>
 </html>
