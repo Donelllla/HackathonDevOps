@@ -1,10 +1,13 @@
 FROM debian:bookworm-slim
 
 RUN apt-get update && apt-get install -y \
-    nginx-full \
+    nginx \
+    libnginx-mod-http-image-filter \
     php-fpm \
     php-gd \
     curl
+
+RUN echo "load_module modules/ngx_http_image_filter_module.so;" > /etc/nginx/modules-enabled/50-mod-http-image-filter.conf
 
 RUN groupadd -g 1000 nginx && \
     useradd -u 1000 -g nginx -s /sbin/nologin -d /var/www nginx
