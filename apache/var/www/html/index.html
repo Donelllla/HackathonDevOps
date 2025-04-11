@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NGINX Proxy Demo</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 2em; }
+        a { display: block; margin: 1em 0; padding: 0.5em; background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>NGINX Reverse Proxy Demo</h1>
+
+    <a href="https://www.yandex.ru">External Page</a>
+    <a href="/secondpage">Second Page (NGINX)</a>
+    <a href="/music.mp3" download>Download Music File</a>
+    <a href="/info.php">PHP Info (Apache)</a>
+    <a href="/secondserver">External Server</a>
+    <a href="/redblue">Red/Blue</a>
+    
+    <div>CPU Load: <span id="cpu-display">-</span>%</div>
+
+    <p>SSL connection: <strong id="ssl-status">checking...</strong></p>
+
+    <h2>Image Examples</h2>
+    <ul>
+        <li><a href="/image1/sample.jpg">Flipped JPG Image</a></li>
+        <li><a href="/image2/sample.png">Original PNG Image</a></li>
+    </ul>    
+
+    <script>
+	const cpuDisplay = document.getElementById('cpu-display');
+	const eventSource = new EventSource('/cpu_status.php');
+	
+	eventSource.onmessage = function(e) {
+		const data = JSON.parse(e.data);
+		cpuDisplay.textContent = data.cpu;
+	};
+	
+	document.getElementById('ssl-status').textContent = window.location.protocol === 'https:' ? 'Active' : 'Inactive';
+    </script>
+</body>
+</html>
